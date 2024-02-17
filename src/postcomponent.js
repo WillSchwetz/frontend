@@ -1,3 +1,11 @@
+/*
+ * PROJECT:         SENG3080 - Advanced Web Frameworks
+ * FILE:            postcomponent.js
+ * PROGRAMMER:      William Schwetz
+ * FIRST VERSION:   2024-02-16
+ * DESCRIPTION:     This file holds the component that displays individual posts
+ */
+
 import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
@@ -9,27 +17,32 @@ function PostComponent(props) {
     const { post: {data} } = props;
     const [buttonPressed, setButtonPressed] = useState(false);
 
+    // Deal with adding a favourite
     const handleAddFavourite = (postID) => {
         setButtonPressed(true);
         if(postID != null){
             const tmpList = [];
+            // Get current list
             const currentList = JSON.parse(localStorage.getItem('subList'));
             if(currentList != null){
                 tmpList.push(...currentList);
             }
             if(tmpList.indexOf(postID) === -1) {
                 tmpList.push(postID);
+                // Save updated list
                 localStorage.setItem('subList', JSON.stringify(tmpList));
             }
         }
     }
 
     const handleRemoveFavourite = (postID) => {
+        // Get current list
         let currentList = JSON.parse(localStorage.getItem('subList'));
         if(currentList != null){
             const index = currentList.indexOf(postID);
             if(currentList.length > 1){
                 if(index !== -1) currentList.splice(index, 1);
+                // Update list
                 localStorage.setItem('subList', JSON.stringify(currentList));
             } else {
                 if(index !== -1) localStorage.clear();

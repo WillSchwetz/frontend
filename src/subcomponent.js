@@ -1,3 +1,10 @@
+/*
+ * PROJECT:         SENG3080 - Advanced Web Frameworks
+ * FILE:            subcomponent.js
+ * PROGRAMMER:      William Schwetz
+ * FIRST VERSION:   2024-02-16
+ * DESCRIPTION:     This file holds the component that displays a modal of posts
+ */
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import React from 'react';

@@ -1,3 +1,11 @@
+/*
+ * PROJECT:         SENG3080 - Advanced Web Frameworks
+ * FILE:            App.js
+ * PROGRAMMER:      William Schwetz
+ * FIRST VERSION:   2024-02-16
+ * DESCRIPTION:     This app calls reddit api, searches subreddits and lets you save your favourite posts.
+ */
+
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 import React, { useState, useEffect } from 'react';
 import './App.css';
@@ -21,13 +29,14 @@ function App() {
   const [token, setToken] = useState(process.env.REACT_APP_TOKEN);
   const [updateTokenShow, setUpdateTokenShow] = useState(false);
 
+  // If token needs to be updated, update
   function updateToken(){
     const newToken = document.getElementById("token_box").value.trim();
-
     setToken(newToken);
     setUpdateTokenShow(false);
   }
 
+  // Default request options for fetch
   var requestOptions = {
     method: 'GET',
     headers:{
@@ -37,35 +46,42 @@ function App() {
   };
 
   const getPosts = async () => {
+    // Get current list
     const currentList = JSON.parse(localStorage.getItem('subList'));
     if(currentList != null){
       
       try{
+        // Call for list of saved posts
         const response = await fetch('https://oauth.reddit.com/by_id/t3_' + currentList.join(",t3_"), requestOptions);
       
         if(response.ok){
+          // if response is good, get data
           const responseJson = await response.json();
           const { data: {children} } = responseJson;
           setFavouriteList(children);
         }
         else{
+          // Display error modal
           setErrorMessage("Cannot reach Reddit API, please check token")
           setErrorModalShow(true);
         }
       } catch {
-        setErrorMessage("Subreddit r/" + subreddit + " not found")
+        // Display error modal
+        setErrorMessage("Subreddit r/" + subreddit + " not found. Check token and try again")
         setErrorModalShow(true);
       }
     } else setFavouriteList([]);
   }
 
   useEffect(() => {
+      // Everytime modalShow or isupdate are changed perform this
       getPosts();
       setIsUpdate(false);
     }, [modalShow, isUpdate] )
 
   const GetRedditPosts = async (e) => {
     e.preventDefault()
+    // If there is nothing in the text box, indicate error
     if(subreddit.length === 0){
       setErrorMessage("Search Box cannot be empty")
       setErrorModalShow(true);
@@ -73,22 +89,25 @@ function App() {
       return;
     }
     try{
+      // Clear error if exists
       setSearchError(false);
+      // Call api
       const response = await fetch('https://oauth.reddit.com/r/' + subreddit + '/hot?limit=10', requestOptions);
     
       if(response.ok){
         const responseJson = await response.json();
-  
         const { data: {children} } = responseJson;
         setSubs(children)
         setModalShow(true)
       }
       else{
+        // Display error modal
         setErrorMessage("Cannot reach Reddit API, please check token")
         setErrorModalShow(true);
       }
     } catch {
-      setErrorMessage("Subreddit r/" + subreddit + " not found")
+      // Display error modal
+      setErrorMessage("Subreddit r/" + subreddit + " not found. Check token and try again")
       setErrorModalShow(true);
     }
   }
