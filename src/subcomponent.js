@@ -19,19 +19,10 @@ function Subcomponent(props) {
       aria-labelledby="contained-modal-title-vcenter"
       centered
     >
-      <Modal.Header>
+      <Modal.Header closeButton>
         <Modal.Title id="contained-modal-title-vcenter">
-          <div style={{display:"flex", flexDirection:"row", width:"100%"}}>
-            <div> 
-              {"r/ " + props.title}
-              <span style={{color:"red", fontSize:"14px", marginLeft: "10px"}}>TOP 10</span>
-              </div>
-            <div style={{flex:1}}>
-              <button type="button" className="close" aria-label="Close" onClick={props.onHide}>
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          </div>
+          {"r/ " + props.title}
+          <span style={{color:"red", fontSize:"14px", marginLeft: "10px"}}>TOP 10</span>
         </Modal.Title>
       </Modal.Header>
       <Modal.Body style={{overflowY: 'auto', maxHeight:"500px"}}>
